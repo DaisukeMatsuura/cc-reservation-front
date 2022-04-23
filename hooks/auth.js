@@ -1,9 +1,9 @@
 import axios from '../lib/axios';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useSWR from 'swr';
 
-export const useAuth = () => {
+export const useAuth = ({ middleware } = {}) => {
   const router = useRouter();
 
   // Loading
@@ -26,10 +26,38 @@ export const useAuth = () => {
   // CSRF
   const csrf = () => axios.get('/sanctum/csrf-cookie');
 
-
   // Login
+  const login = async ({ setErrors, ...props }) => {
+    setErrors([]);
+
+    await csrf();
+
+    axios
+      .post('/login')
+      .then(() => mutate() && router.push('/dashboard'))
+      .catch((error) => {
+        if (error.response.status != 422) throw error;
+
+        setErrors(Object.values(error.response.data.errors).flat());
+      });
+  };
 
   // Logout
+  const logout = async () => {
+    await axios.post('/logout');
+    mutate(null);
+
+    router.push('/');
+  };
+
+  useEffect(() => {
+    if (user || error) {
+      setIsLoading(false);
+    }
+
+    if (middleware == 'guest' && user) router.push('/');
+    if (middleware == 'auth' && error) router.push('/login');
+  });
 
   return {
     user,
