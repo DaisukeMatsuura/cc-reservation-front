@@ -1,14 +1,20 @@
 import { FC } from 'react';
 
 type Props = {
-  disabled?: boolean;
+  htmlFor?: string;
   className?: string;
   children?: string;
 };
 
-export const Label: FC<Props> = ({ children, className = '', ...props }) => {
+export const Label: FC<Props> = ({
+  children,
+  htmlFor = '',
+  className = '',
+  ...props
+}) => {
   return (
     <label
+      htmlFor={htmlFor}
       className={`${className} block text-blue-700`}
       {...props}
     >
