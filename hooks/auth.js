@@ -34,7 +34,7 @@ export const useAuth = ({ middleware } = {}) => {
 
     axios
       .post('/login')
-      .then(() => mutate() && router.push('/dashboard'))
+      .then(() => mutate() && router.push('/'))
       .catch((error) => {
         if (error.response.status != 422) throw error;
 

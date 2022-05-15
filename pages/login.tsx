@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '../hooks/auth';
 import { Input } from '../components/base/Input';
 import { Label } from '../components/base/Label';
+import { Errors } from '../components/page/Login';
 
 const Login = () => {
   // States
@@ -22,8 +23,7 @@ const Login = () => {
   // Submit form
   const submitForm = async (e: any) => {
     e.preventDefault();
-    // login({ email, password, setErrors });
-    console.log(email, password);
+    login({ email, password, setErrors });
   };
 
   return (
@@ -34,6 +34,7 @@ const Login = () => {
       </Head>
 
       <div className="mx-auto bg-white shadow p-2 rounded">
+        <Errors errors={errors} />
         <form onSubmit={submitForm} autoComplete="off" className="space-y-4">
           <div className="">
             <Label htmlFor="email" className="cursor-pointer">
